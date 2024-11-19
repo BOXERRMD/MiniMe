@@ -1,0 +1,2 @@
+# MiniMe
+ A file compressor
