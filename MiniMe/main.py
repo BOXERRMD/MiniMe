@@ -1,5 +1,7 @@
 import argparse
-from os import path as os_path
+
+
+from .Compressor import Compressor
 
 class MiniMe:
 
@@ -12,10 +14,12 @@ class MiniMe:
         self.args: argparse.Namespace
         self.paths = paths
         self.to = to
+        self.path_compressed_file: str = ''
 
     def _in_shell(self)->None:
         """
         Execute if the file is executed in a shell
+        **ONLY EXECUTABLE**
         :return: None
         """
 
@@ -25,19 +29,11 @@ class MiniMe:
 
         parser.add_argument("paths", action="extend", nargs='+', type=str,
                             help="Give all paths (directory of file) to compress")
-        parser.add_argument("--to", "--t", action='store', type=str,
+        parser.add_argument("--to", "--t", action='store', type=str, default='',
                             help="Give the destination path. Default : the first directory path given. If is a file, the destination is the directory file.")
 
-        self.args = parser.parse_args()
-        self.__split_files(self.args.paths)
+        self.args = parser.parse_args(["D:\PycharmProjects\Compresseur_fichiers\\test.txt"])
+        print(self.args)
 
+        self.path_compressed_file = Compressor().start_compressor(*self.args.paths, destination=self.args.to)
 
-    def __split_files(self, paths):
-
-        for path in paths:
-            print(path)
-
-
-if __name__ == '__main__':
-    C = MiniMe()
-    C._in_shell()
