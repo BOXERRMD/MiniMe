@@ -1,6 +1,8 @@
 from os import path as os_path
 from immutableType import Tuple_, Str_
+from typing import Union, AnyStr
 
+from .fileCompressor import FileCompressor
 from .ERRORS import PathError
 from .color import Style
 set_style = Style()
@@ -14,6 +16,8 @@ class Compressor:
         self.files: list[str] = []
         self.folders: list[str] = []
         self.destination: str = ''
+
+        self.compressed_files:list = []
 
     def __split_paths(self, paths, destination:str)->None:
         """
@@ -51,11 +55,20 @@ class Compressor:
         destination = Str_(destination)
         paths = Tuple_(paths)
 
+        # divise les chemins d'accès entre fichiers et dossiers + check si se sont des chemins valide
         self.__split_paths(paths, destination=destination.str_)
 
+        for file in self.files:
+            self.compressed_files.append((FileCompressor(self.__open_file(file), file), file))
 
-    def __open_file(self, path: str | Str_):
-        with open(path, 'r') as file:
+
+    def __open_file(self, path: Union[str, Str_]) -> AnyStr:
+        """
+        Open and read the file in binary mode.
+        :param path: The path to the file
+        :return: bits
+        """
+        with open(path, 'rb') as file:
             return file.read()
 
 
