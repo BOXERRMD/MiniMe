@@ -15,20 +15,6 @@ class Compressor:
         self.folders: list[str] = []
         self.destination: str = ''
 
-    def start_compressor(self, *paths, destination: str='') -> str:
-        """
-
-        :param paths: All paths to compress (files or directories)
-        :param destination: The path to the compressed file destination
-        :return: The compressed file path
-        """
-        destination = Str_(destination)
-        paths = Tuple_(paths)
-
-        self.__split_paths(paths, destination=destination.str_)
-
-
-
     def __split_paths(self, paths, destination:str)->None:
         """
         Check if all paths exists
@@ -54,4 +40,22 @@ class Compressor:
         self.destination = destination
         self.folders = folders
         self.files = files
+
+    def start_compressor(self, *paths, destination: str='') -> str:
+        """
+
+        :param paths: All paths to compress (files or directories)
+        :param destination: The path to the compressed file destination
+        :return: The compressed file path
+        """
+        destination = Str_(destination)
+        paths = Tuple_(paths)
+
+        self.__split_paths(paths, destination=destination.str_)
+
+
+    def __open_file(self, path: str | Str_):
+        with open(path, 'r') as file:
+            return file.read()
+
 
